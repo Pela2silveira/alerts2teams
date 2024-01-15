@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alert2teams
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alert2teams
+  template:
+    metadata:
+      labels:
+        app: alert2teams
+    spec:
+      containers:
+      - name: alert2teams
+        image: pelasilveira/alert2teams:v0.1.3
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        - name: DESTINATION_ENDPOINT
+          value: "https://example.webhook.office.com/webhookb2/xxxx/IncomingWebhook/yyy/zzz"
+        volumeMounts:
+        - name: template-volume
+          mountPath: /app
+      volumes:
+        - name: template-volume
+          configMap:
+            name: alert2teams
